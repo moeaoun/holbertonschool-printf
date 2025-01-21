@@ -1,11 +1,17 @@
 #ifndef MAIN_H
 #define MAIN_H
 
-#include <stdarg.h>  /* For va_list, va_start, va_arg, va_end */
-#include <unistd.h>  /* For write function */
+#include <stdarg.h>
+#include <unistd.h>
 
-/* Function prototype */
+/* Function prototypes */
 int _printf(const char *format, ...);
+int print_number(int n);
+int print_unsigned(unsigned int n);
+int print_octal(unsigned int n);
+int print_hex_lower(unsigned int n);
+int print_hex_upper(unsigned int n);
+int print_binary(unsigned int n);
 
-#endif
+#endif /* MAIN_H */
 

@@ -6,6 +6,7 @@ int print_unsigned(unsigned int n);
 int print_octal(unsigned int n);
 int print_hex_lower(unsigned int n);
 int print_hex_upper(unsigned int n);
+int print_binary(unsigned int n);
 
 /**
  * _printf - Function that produces output according to a format.
@@ -103,6 +104,27 @@ int _printf(const char *format, ...)
     }
 
     va_end(args);
+    return (count);
+}
+
+/**
+ * print_binary - Helper function to print an unsigned integer as binary.
+ * @n: The unsigned integer to print in binary.
+ *
+ * Return: The number of characters printed.
+ */
+int print_binary(unsigned int n)
+{
+    int count = 0;
+
+    if (n / 2 != 0)
+    {
+        count += print_binary(n / 2);
+    }
+
+    write(1, &"01"[n % 2], 1);
+    count++;
+
     return (count);
 }
 
