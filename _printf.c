@@ -19,6 +19,8 @@ int _printf(const char *format, ...)
     va_list args;
     int count = 0;
     const char *ptr;
+    char buffer[1024];  /* Buffer to store characters */
+    int buffer_index = 0; /* Index to track the current position in buffer */
 
     va_start(args, format);
 
@@ -34,8 +36,15 @@ int _printf(const char *format, ...)
             {
                 char c = va_arg(args, int);
 
-                write(1, &c, 1);
+                /* Store in buffer and flush if needed */
+                buffer[buffer_index++] = c;
                 count++;
+
+                if (buffer_index == 1024)
+                {
+                    write(1, buffer, buffer_index);
+                    buffer_index = 0;
+                }
             }
             else if (*(ptr + 1) == 's')  /* Handle string */
             {
@@ -48,14 +57,26 @@ int _printf(const char *format, ...)
 
                 while (*str)
                 {
-                    write(1, str++, 1);
+                    buffer[buffer_index++] = *str++;
                     count++;
+
+                    if (buffer_index == 1024)
+                    {
+                        write(1, buffer, buffer_index);
+                        buffer_index = 0;
+                    }
                 }
             }
             else if (*(ptr + 1) == '%')  /* Handle percentage */
             {
-                write(1, "%", 1);
+                buffer[buffer_index++] = '%';
                 count++;
+
+                if (buffer_index == 1024)
+                {
+                    write(1, buffer, buffer_index);
+                    buffer_index = 0;
+                }
             }
             else if (*(ptr + 1) == 'd' || *(ptr + 1) == 'i')  /* Handle integer */
             {
@@ -98,9 +119,23 @@ int _printf(const char *format, ...)
         }
         else
         {
-            write(1, ptr, 1);
+            /* If not a format specifier, store the character in buffer */
+            buffer[buffer_index++] = *ptr;
             count++;
+
+            if (buffer_index == 1024)
+            {
+                /* Write buffer to stdout when full */
+                write(1, buffer, buffer_index);
+                buffer_index = 0;
+            }
         }
+    }
+
+    /* If there are remaining characters in buffer, flush them */
+    if (buffer_index > 0)
+    {
+        write(1, buffer, buffer_index);
     }
 
     va_end(args);
