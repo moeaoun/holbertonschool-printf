@@ -1,0 +1,15 @@
+#include <unistd.h>  /* For write function */
+
+/**
+ * _putchar - Custom function to print a character to stdout
+ * @c: The character to print
+ *
+ * Return: On success, return 1 (number of characters printed).
+ *         On error, return -1 and errno is set appropriately.
+ */
+int _putchar(char c)
+{
+    return (write(1, &c, 1));
+}
+
+~                                                 
