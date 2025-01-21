@@ -2,9 +2,9 @@
 
 /**
  * _printf - Function that produces output according to a format.
- * @format: The format string containing the directives
+ * @format: The format string containing the directives.
  *
- * Return: The number of characters printed (excluding null byte)
+ * Return: The number of characters printed (excluding null byte).
  */
 int _printf(const char *format, ...)
 {
@@ -16,7 +16,8 @@ int _printf(const char *format, ...)
 
     for (ptr = format; *ptr != '\0'; ptr++)
     {
-        if (*ptr == '%' && *(ptr + 1) != '\0')
+        if (*ptr == '%' && (*(ptr + 1) == 'c' || *(ptr + 1) == 's' ||
+            *(ptr + 1) == '%'))
         {
             if (*(ptr + 1) == 'c')  /* Handle character */
             {
@@ -27,8 +28,10 @@ int _printf(const char *format, ...)
             else if (*(ptr + 1) == 's')  /* Handle string */
             {
                 char *str = va_arg(args, char *);
+
                 if (str == NULL)
                     str = "(null)";
+
                 while (*str)
                 {
                     write(1, str++, 1);
@@ -40,12 +43,8 @@ int _printf(const char *format, ...)
                 write(1, "%", 1);
                 count++;
             }
+
             ptr++;  /* Skip the next character */
-        }
-        else if (*ptr == '%' && *(ptr + 1) == '\0')  /* Handle trailing '%' */
-        {
-            write(1, "%", 1);
-            count++;
         }
         else
         {
